@@ -1,0 +1,12 @@
+% Facts
+man(socrates).
+man(einstein).
+man(alexander).
+
+% Rule
+mortal(X) :- man(X).
+
+% Output
+:- mortal(socrates).
+:- mortal(einstein).
+:- mortal(alexander).
