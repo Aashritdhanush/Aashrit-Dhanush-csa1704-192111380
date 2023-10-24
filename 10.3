@@ -1,0 +1,41 @@
+% Facts
+passesExams(X) :- historyExam(X), lotteryWinner(X).
+happy(X) :- passesExams(X).
+studies(X) :- studiesOrLucky(X).
+lucky(X) :- studiesOrLucky(X).
+lotteryWinner(X) :- lucky(X).
+
+% Negation of the statement to be proven
+:- happy(john).
+
+% Clauses
+studiesOrLucky(X) :- studies(X).
+studiesOrLucky(X) :- lucky(X).
+
+% Given Information
+historyExam(john).
+lucky(john).
+
+% Resolution Refutation
+resolve(true, true, []).
+resolve(Left, true, Left) :- !.
+resolve(true, Right, Right) :- !.
+resolve(Left, Right, Resolvent) :-
+    member(Literal, Left),
+    negate(Literal, Negated),
+    select(Negated, Right, NewRight),
+    subtract(Left, [Literal], NewLeft),
+    union(NewLeft, NewRight, Resolvent).
+
+negate(\+ X, X) :- !.
+negate(X, \+ X).
+
+prove(false) :-
+    write('Contradiction! John is happy.'), nl.
+
+prove(Current) :-
+    resolve(Current, Clause, Resolvent),
+    prove(Resolvent).
+
+% Entry point
+:- prove([ \+ happy(john) ]).
