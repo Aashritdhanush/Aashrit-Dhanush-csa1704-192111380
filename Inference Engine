@@ -1,0 +1,28 @@
+% Sample Facts
+father(john, jim).
+father(john, ann).
+mother(lisa, jim).
+mother(lisa, ann).
+
+% Rules
+parent(X, Y) :- father(X, Y).
+parent(X, Y) :- mother(X, Y).
+
+% Inference Engine
+interpret(true) :- !.
+interpret((GoalA, GoalB)) :- !,
+    interpret(GoalA),
+    interpret(GoalB).
+interpret(Goal) :-
+    Goal,
+    write(Goal), write(' is true.'), nl.
+interpret(Goal) :-
+    \+ Goal,
+    write(Goal), write(' is false.'), nl.
+
+% Example Usage
+:- interpret(parent(john, jim)).
+:- interpret(parent(lisa, jim)).
+:- interpret(parent(john, ann)).
+:- interpret(parent(lisa, ann)).
+:- interpret(parent(unknown, unknown)).
